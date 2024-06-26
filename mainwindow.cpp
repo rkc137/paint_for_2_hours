@@ -14,8 +14,13 @@ MainWindow::MainWindow(QWidget *parent)
         if(dlg.exec() == QDialog::Accepted)
             scene.set_color(dlg.currentColor());
     });
-    connect(ui->horizontalSlider, &QSlider::valueChanged, this, [&](){
-        scene.set_pen_size(ui->horizontalSlider->value());
+    connect(ui->brush_size_horizontalSlider, &QSlider::valueChanged, this, [&](){
+        scene.set_pen_size(ui->brush_size_horizontalSlider->value());
+        ui->brush_size_spinBox->setValue(ui->brush_size_horizontalSlider->value());
+    });
+    connect(ui->brush_size_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int change) {
+        ui->brush_size_horizontalSlider->setValue(change);
+        scene.set_pen_size(ui->brush_size_horizontalSlider->value());
     });
 
     connect(ui->pen, &QRadioButton::toggled, this, [&](){
