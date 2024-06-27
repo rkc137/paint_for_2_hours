@@ -70,6 +70,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     auto new_point = event->scenePos().toPoint();
     if(!is_valid_point((new_point)))
         return;
+
     switch(instrument)
     {
     case instruments::pen:
@@ -79,7 +80,12 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     case instruments::rect:
     {
-        rect_blue_print.setRect(start_pos.x(), start_pos.y(), new_point.x() - start_pos.x(), new_point.y() - start_pos.y());
+        auto first = new_point, secnd = start_pos;
+        if(first.x() < secnd.x())
+            std::swap(first.rx(), secnd.rx());
+        if(first.y() < secnd.y())
+            std::swap(first.ry(), secnd.ry());
+        rect_blue_print.setRect(secnd.x(), secnd.y(), first.x() - secnd.x(), first.y() - secnd.y());
         break;
     }
     case instruments::elps:
@@ -118,6 +124,16 @@ void Scene::save_file(QFile path)
     QPainter painter(&image);
     render(&painter);
     image.save(path.fileName());
+}
+
+void Scene::open_file(QFile path)
+{
+    QImage image(path.fileName());
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+    item->setScale(1);
+    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    item->setPos(0, 0);
+    addItem(item);
 }
 
 bool Scene::is_valid_point(QPoint point)

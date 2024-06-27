@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene.set_rect(QRect(0, 0, 1000, 800));
 
     connect(ui->save, &QAction::triggered, this, &MainWindow::save_scene);
+    connect(ui->open, &QAction::triggered, this, &MainWindow::add_image_to_scene);
 
     connect(ui->clr_butt, &QPushButton::clicked, this, [&](){
         QColorDialog dlg;
@@ -38,9 +39,15 @@ MainWindow::MainWindow(QWidget *parent)
     });
 }
 
+void MainWindow::add_image_to_scene()
+{
+    QString file_path = QFileDialog::getOpenFileName(this, tr("открыть файл"), "://имя файла.png", tr("*.png", "*.jpeg"));
+    scene.open_file(QFile(file_path));
+}
+
 void MainWindow::save_scene()
 {
-    QString file_path = QFileDialog::getSaveFileName(this, tr("сохранить тест"), "://имя файла.png", tr("*.png"));
+    QString file_path = QFileDialog::getSaveFileName(this, tr("сохранить файл"), "://имя файла.png", tr("*.png", "*.jpeg"));
     scene.save_file(QFile(file_path));
 }
 

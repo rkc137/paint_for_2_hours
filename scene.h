@@ -25,6 +25,7 @@ public:
     void set_pen_size(int s);
 
     void save_file(QFile path);
+    void open_file(QFile path);
 
     enum class instruments{
         pen,

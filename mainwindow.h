@@ -25,6 +25,7 @@ public:
 
 public slots:
     void save_scene();
+    void add_image_to_scene();
 
 private:
     Ui::MainWindow *ui;
