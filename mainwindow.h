@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QColorDialog>
+#include <QFileDialog>
+#include <QFile>
 #include <qdebug.h>
 
 #include "scene.h"
@@ -21,7 +23,11 @@ public:
 
     Scene scene;
 
+public slots:
+    void save_scene();
+
 private:
     Ui::MainWindow *ui;
 };
+
 #endif // MAINWINDOW_H

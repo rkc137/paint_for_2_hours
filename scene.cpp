@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "qpainter.h"
 
 Scene::Scene()
 {
@@ -106,6 +107,17 @@ void Scene::set_color(QColor clr)
 void Scene::set_pen_size(int s)
 {
     pen.setWidth(s);
+}
+
+void Scene::save_file(QFile path)
+{
+    clearSelection();                                                  // Selections would also render to the file
+    setSceneRect(itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    QImage image(sceneRect().size().toSize(), QImage::Format_ARGB32);  // Create the image with the exact size of the shrunk scene
+    image.fill(Qt::transparent);                                              // Start all pixels transparent
+    QPainter painter(&image);
+    render(&painter);
+    image.save(path.fileName());
 }
 
 bool Scene::is_valid_point(QPoint point)

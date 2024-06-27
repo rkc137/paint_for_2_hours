@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setScene(&scene);
     scene.set_rect(QRect(0, 0, 1000, 800));
 
+    connect(ui->save, &QAction::triggered, this, &MainWindow::save_scene);
+
     connect(ui->clr_butt, &QPushButton::clicked, this, [&](){
         QColorDialog dlg;
         if(dlg.exec() == QDialog::Accepted)
@@ -20,8 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(ui->brush_size_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int change) {
         ui->brush_size_horizontalSlider->setValue(change);
-        scene.set_pen_size(ui->brush_size_horizontalSlider->value());
-    });
+    });ui->brush_size_horizontalSlider->setValue(ui->brush_size_horizontalSlider->value());
 
     connect(ui->pen, &QRadioButton::toggled, this, [&](){
         if(ui->pen->isChecked())
@@ -37,8 +38,15 @@ MainWindow::MainWindow(QWidget *parent)
     });
 }
 
+void MainWindow::save_scene()
+{
+    QString file_path = QFileDialog::getSaveFileName(this, tr("сохранить тест"), "://имя файла.png", tr("*.png"));
+    scene.save_file(QFile(file_path));
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 

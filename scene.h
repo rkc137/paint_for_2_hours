@@ -8,7 +8,7 @@
 #include <QGraphicsSceneWheelEvent>
 #include <QBrush>
 #include <QPen>
-
+#include <QFile>
 #include <cmath>
 
 class Scene : public QGraphicsScene
@@ -23,6 +23,8 @@ public:
     void set_rect(QRect rect);
     void set_color(QColor clr);
     void set_pen_size(int s);
+
+    void save_file(QFile path);
 
     enum class instruments{
         pen,
