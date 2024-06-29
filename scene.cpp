@@ -1,8 +1,11 @@
 #include "scene.h"
 #include "qpainter.h"
 
-Scene::Scene()
+Scene::Scene(QGraphicsView *_view, QWidget *parent)
+    : QGraphicsScene{parent}
 {
+    view = _view;
+    view->setScene(this);
     pen.setWidth(3);
     pen.setColor(Qt::black);
     rect_blue_print.setPen(pen);
@@ -128,16 +131,26 @@ void Scene::save_file(QFile path)
 
 void Scene::open_file(QFile path)
 {
-    QImage image(path.fileName());
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-    item->setScale(1);
-    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    item->setPos(0, 0);
-    addItem(item);
+    addPixmap(QPixmap::fromImage(QImage(path.fileName())));
+}
+
+void Scene::clear_all()
+{
+    removeItem(&rect_blue_print);
+    removeItem(&elps_blue_print);
+    clear();
 }
 
 bool Scene::is_valid_point(QPoint point)
 {
     return ((point.x() > sceneRect().x()     && point.y() > sceneRect().y()) &&
             (point.x() < sceneRect().width() && point.y() < sceneRect().height()));
+}
+
+void Scene::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    if(event->delta() > 0)
+        view->scale(1.5, 1.5);
+    else
+        view->scale(0.75,0.75);
 }

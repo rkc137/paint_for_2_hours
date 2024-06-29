@@ -1,11 +1,13 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
+#include <QDebug>
 #include <QBrush>
 #include <QPen>
 #include <QFile>
@@ -15,10 +17,12 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    Scene();
+    Scene(QGraphicsView *_view, QWidget *parent);
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
+
 
     void set_rect(QRect rect);
     void set_color(QColor clr);
@@ -32,6 +36,10 @@ public:
         rect,
         elps
     } instrument = instruments::pen;
+
+public slots:
+    void clear_all();
+
 private:
     QPen pen;
     QPoint pen_pos = {0, 0};
@@ -42,7 +50,7 @@ private:
     QGraphicsRectItem rect_blue_print;
     QGraphicsEllipseItem elps_blue_print;
 
-
+    QGraphicsView *view = nullptr;
     bool is_valid_point(QPoint point);
 };
 

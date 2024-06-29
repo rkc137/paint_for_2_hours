@@ -21,7 +21,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    Scene scene;
+    Scene *scene = nullptr;
 
 public slots:
     void save_scene();
